@@ -1,0 +1,135 @@
+---
+title: "Web scraping with r"
+author: "Anestis"
+date: "16/7/2020"
+output: html_document
+---
+
+
+```{r Getting the url and the prequistities packages for the project}
+
+url <-"https://www.coursera.org/search?query=data%20science%20"
+webpage <- read_html(url)
+library(rvest)
+library(tidyverse)
+```
+
+```{r Gathering the courses_names and collecting them as text}
+
+Courses_name_html <- html_nodes(webpage, ".card-title")
+Courses_name <- html_text(Courses_name_html)
+Courses_name <- gsub("","" , Courses_name)
+Courses_name <- as.character(Courses_name)
+Courses_name
+```
+
+```{r  Gathering the institutes_names and collecting them as text}
+# Institutes
+Institutes_name_html <- html_nodes(webpage, "span.partner-name") 
+Institutes_name <- html_text(Institutes_name_html) 
+Institutes_name <- gsub("","",Institutes_name)
+Institutes_name <- as.character(Institutes_name)
+Institutes_name <- Institutes_name[-c(1:43)]
+Institutes_name
+
+
+```
+
+```{r  Gathering the Category_courses_names and collecting them as text}
+Category_name_html <- html_nodes(webpage, "div._jen3vs ")
+Category_name <- html_text(Category_name_html)
+
+Category_name <- Category_name[-c(10:15)]
+Category_name
+```
+
+```{r  Gathering the Ratings and collecting them as text}
+Ratings_data_html <- html_nodes(webpage, "span.ratings-text")
+Ratings_data<- html_text(Ratings_data_html)
+Ratings_data <- as.numeric(Ratings_data)
+Ratings_data
+```
+
+
+```{r  Gathering the Ratings and collecting them as text}
+
+Ratings_count_html <- html_nodes(webpage, '.ratings-count')
+Ratings_count <- html_text(Ratings_count_html)
+
+
+Ratings_count <- gsub(",","",Ratings_count)
+
+# Elliminating the parenthesis from the numbers
+Ratings_count <- gsub("[()]","",Ratings_count)
+Ratings_count <- as.numeric(Ratings_count)
+Ratings_count
+```
+
+
+```{r  Gathering the Enrolled_students_numbers and collecting them as text}
+
+Enrolled_students_html <- html_nodes(webpage, ".ratings-count")
+Enrolled_students <- html_text(Enrolled_students_html)
+
+Enrolled_students <- gsub(",", "", Enrolled_students)
+Enrolled_students <- gsub("[()]", "", Enrolled_students)
+Enrolled_students <- as.numeric(Enrolled_students)
+
+Enrolled_students
+```
+
+```{r The final project}
+
+DS_Courses <- data.frame(Name_of_the_course = Courses_name, Institutes = Institutes_name, Category = Category_name, Ratings_on_courses = Ratings_data, No.Ratings_by_people = Ratings_count)
+```
+
+```{r Analysis in the final dataframe}
+summary(DS_Courses)
+
+# I will analyze what institues are mostly seen
+
+ggplot(DS_Courses, aes(
+  x = Institutes,
+  y = prop.table(stat(count)),
+  label = scales::percent(prop.table(stat(count)))
+)) + geom_bar(position = position_dodge()) +
+  geom_text(
+    vjust = -0.5,
+    position = position_dodge(.9),
+    size = 3,
+    stat = 'count'
+  ) + scale_y_continuous(labels = scales::percent) +
+  labs(title = 'What is the most seen Institute in the dataframe',
+    x = 'Institute',
+    y = 'Seen by'
+  ) + theme_bw()
+
+# Now about the category
+
+ggplot(DS_Courses, aes(
+  x = Category,
+  y = prop.table(stat(count)),
+  label = scales::percent(prop.table(stat(count)))
+)) + geom_bar(position = position_dodge()) +
+  geom_text(
+    vjust = -0.5,
+    position = position_dodge(.9),
+    size = 3,
+    stat = 'count'
+  ) + scale_y_continuous(labels = scales::percent) +
+  labs(title = 'What seek the clients of coursera Platform',
+       subtitle = 'By Category',
+    x = 'Category',
+    y = 'Seen by'
+  ) + theme_bw()
+
+# Ratings
+ggplot(DS_Courses, aes(
+  x = Ratings_data
+)) + geom_histogram(color = 'blue', fill = 'white', binwidth = 0.01) + labs(
+  title = 'Ratings that have the courses',
+  subtitle = 'Coursera',
+  x = 'Ratings_numbers',
+  y = 'count'
+) + theme_bw()
+```
