@@ -1,5 +1,5 @@
 <h1>Web Scraping with R</h1>
-<p> This project is about scraping the top 10 courses on Data Science at the platform Coursera with no filters using the rvest package working on RStudio cloud.<br>
+<p> Introduction: This project is about scraping the top 10 courses on Data Science at the platform Coursera. The project was developed on RStudio Cloud<br>
  </p>
 <h2>Libraries 
 <p>The libraries that used for this project are 
