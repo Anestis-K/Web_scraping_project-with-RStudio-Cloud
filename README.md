@@ -1,4 +1,4 @@
-<h1>Web Scraping with R</h1>
+<h1>Web Scraping with R </h1>
 <p> Introduction: This project is about scraping the top 10 courses on Data Science at the platform Coursera. The project was developed on RStudio Cloud<br>
  </p>
 <h2>Libraries</h2>
