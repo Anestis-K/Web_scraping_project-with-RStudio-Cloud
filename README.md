@@ -12,6 +12,8 @@
  <br>
  Also, i have gathered some interesting facts about the project
 <br>
+<br>
+AVERAGE RATINGS OF PROJECTS
 
 ![Ratings that courses have](https://user-images.githubusercontent.com/47696240/87810274-65006c00-c865-11ea-91ca-ccfe306fb869.png) </br>
 
